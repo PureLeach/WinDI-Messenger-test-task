@@ -1,0 +1,111 @@
+[tool.pytest.ini_options]
+addopts = "-s --asyncio-mode=auto --import-mode=prepend"
+env = [
+    "POSTGRES_HOST=localhost",
+    "POSTGRES_DB_NAME=fastapi-boilerplate-test",
+]
+
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+disallow_incomplete_defs = true
+warn_unused_ignores = true
+exclude = "(.venv|tests/)"
+plugins = [
+    "pydantic.mypy",
+]
+
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+exclude = [".venv"]
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+docstring-code-line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "F",        # Pyflakes (unused imports, undefined variables)
+    "E",        # pycodestyle error (syntax and indentation errors)
+    "W",        # pycodestyle warning (style-related warnings)
+    "C90",      # mccabe (checks for functions with a high McCabe complexity)
+    "I",        # isort (import conventions)
+    "N",        # pep8-naming (naming conventions)
+    "UP",       # pyupgrade (compatibility with newer Python versions)
+    "YTT",      # flake8-2020 (detects usage of features removed in Python 3.9 and later)
+    "ANN",      # flake8-annotations (enforces function annotations)
+    "ASYNC",    # flake8-async (checks for correct usage of async functions)
+    "S",        # flake8-bandit (security vulnerabilities)
+    "BLE",      # flake8-blind-except (detects broad except clauses)
+    "FBT",      # flake8-boolean-trap (detects boolean traps)
+    "B",        # flake8-bugbear (identifies common coding mistakes and bugs)
+    "COM",      # flake8-commas (checks for proper usage of commas)
+    "C4",       # flake8-comprehensions (suggests more efficient comprehension syntax)
+    "T10",      # flake8-debugger (detects use of debugger-related statements like `pdb.set_trace()`)
+    "EM",       # flake8-errmsg (enforces consistency in error messages)
+    "EXE",      # flake8-executable (checks for executable permissions on files)
+    "FA",       # flake8-future-annotations (enforces future-style type annotations)
+    "ISC",      # flake8-implicit-str-concat (warns about implicit string concatenation)
+    "ICN",      # flake8-import-conventions (checks for proper import ordering and style)
+    "LOG",      # flake8-logging (enforces consistent use of logging)
+    "G",        # flake8-logging-format (checks for consistent logging format)
+    "INP",      # flake8-no-pep420 (warns if a module contains `__init__.py` and uses PEP 420 namespace)
+    "PIE",      # flake8-pie (suggests Python Improvement Proposal checks)
+    "T20",      # flake8-print (checks for print statements in production code)
+    "PYI",      # flake8-pyi (checks for `.pyi` files, typically type hint files)
+    "PT",       # flake8-pytest-style (checks for pytest-specific code style issues)
+    "Q",        # flake8-quotes (enforces consistent use of quotes for strings)
+    "RSE",      # flake8-raise (checks for proper usage of `raise` statements)
+    "RET",      # flake8-return (enforces consistent return statements)
+    "SLF",      # flake8-self (enforces usage of `self` in methods within classes)
+    "SLOT",     # flake8-slots (enforces the usage of `__slots__` in classes to optimize memory)
+    "SIM",      # flake8-simplify (suggests ways to simplify code)
+    "TID",      # flake8-tidy-imports (checks for tidy import statements)
+    "TC",       # flake8-type-checking (ensures compatibility with type-checking tools)
+    "INT",      # flake8-gettext (ensures compatibility with gettext for internationalization)
+    "ARG",      # flake8-unused-arguments (warns about unused function arguments)
+    "PTH",      # flake8-use-pathlib (encourages usage of `pathlib` over `os.path`)
+    "TD",       # flake8-todos (checks for TODO comments in the code)
+    "FIX",      # flake8-fixme (checks for FIXME comments in the code)
+    "ERA",      # eradicate (removes commented-out code)
+    "PD",       # pandas-vet (checks for pandas-specific coding practices)
+    "PGH",      # pygrep-hooks (applies custom grep hooks for specific patterns)
+    "PL",       # Pylint (standard pylint checks)
+    "FLY",      # flynt (automates the conversion of string formatting to f-strings)
+    "NPY",      # NumPy-specific rules (checks for NumPy-specific best practices)
+    "FAST",     # FastAPI (checks for FastAPI-specific issues)
+    "PERF",     # Perflint (checks for performance-related issues)
+    "FURB",     # refurb (suggests refactoring opportunities)
+    "DOC",      # pydoclint (enforces PEP-257 docstring conventions)
+    "RUF",      # Ruff-specific rules (Ruff’s own rules for static analysis)
+]
+
+ignore = [
+    "G004",     # allow f-strings in logging messages
+    "ANN401",   # allow dynamically typed expressions (Any)
+    "SLF001",   # allow private member accessed
+    ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"project/alembic/versions/*" = [
+    "INP001",     # allows without file __init__.py 
+    ]
+"tests/*" = [
+    "S101",     # allow assert
+    "ANN",      # allow missing type annotation
+    "PT003",    # allow scope='function' in fixture
+    "ARG001",    # allow unused function argument
+    "ERA001",    # allow commented-out code
+    ]
+
+
+[tool.vulture]
+paths = ["project/",]
+exclude = [".venv/", "project/alembic/"]
+ignore_decorators = ["@app.route", ]
+min_confidence = 70
+ignore_names = ["cls",]
