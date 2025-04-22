@@ -1,35 +1,18 @@
-from fastapi import APIRouter, Request, status
+from typing import Annotated
 
-from project.core.base_classes.base_model import PositiveInt32
-from project.modules.users.models import UserCreateRequest, UserResponse
+from fastapi import APIRouter, Depends
+
+from project.modules.users.models import UserCreate, UserOut
+from project.modules.users.repository import UserRepository
 from project.modules.users.service import UserService
 
-users_router = APIRouter(tags=["Users"])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@users_router.get(
-    "/users/",
-    summary="Get all users",
-)
-async def get_all_users(_: Request) -> list[UserResponse]:
-    service = UserService()
-    return await service.get_users()
+def get_user_service() -> UserService:
+    return UserService(UserRepository())
 
 
-@users_router.get(
-    "/users/{user_id}/",
-    summary="Get user",
-)
-async def get_user(_: Request, user_id: PositiveInt32) -> UserResponse:
-    service = UserService()
-    return await service.get_user(user_id)
-
-
-@users_router.post(
-    "/users/",
-    summary="Create user",
-    status_code=status.HTTP_201_CREATED,
-)
-async def create_user(_: Request, user: UserCreateRequest) -> UserResponse:
-    service = UserService()
-    return await service.create_user(user)
+@router.post("/")
+async def create_user(user: UserCreate, service: Annotated[UserService, Depends(get_user_service)]) -> UserOut:
+    return await service.register_user(user)

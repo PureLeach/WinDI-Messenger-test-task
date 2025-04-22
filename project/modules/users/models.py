@@ -1,13 +1,15 @@
-from project.core.base_classes.base_model import AwareDatetime, ConstrainedName, ProjectBaseModel
+from uuid import UUID
+
+from project.core.base_classes.base_model import ProjectBaseModel
 
 
-class UserCreateRequest(ProjectBaseModel):
-    name: ConstrainedName
-
-
-class UserResponse(ProjectBaseModel):
-    id: int
+class UserCreate(ProjectBaseModel):
     name: str
-    created_at: AwareDatetime
-    updated_at: AwareDatetime
-    deleted: bool
+    email: str
+    password: str
+
+
+class UserOut(ProjectBaseModel):
+    id: UUID
+    name: str
+    email: str
