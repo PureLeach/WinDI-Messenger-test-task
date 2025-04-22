@@ -8,12 +8,12 @@ from project.config.logging import LoggingConfig
 
 class Settings(BaseSettings):
     DEBUG: bool = True
-    PROJECT_NAME: str = "fastapi-boilerplate-project"
+    PROJECT_NAME: str = "WinDI-Messenger-test-task"
 
     DB: DBConfig = DBConfig()
 
     LOGGING: LoggingConfig = LoggingConfig()
-    LOGGER: logging.Logger = logging.getLogger("StandoffApp")
+    LOGGER: logging.Logger = logging.getLogger("WinDI-Messenger")
 
 
 settings = Settings()
