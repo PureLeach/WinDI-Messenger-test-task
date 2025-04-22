@@ -5,11 +5,10 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from project.config.db import metadata
 
-users = Table(
-    "users",
+chats = Table(
+    "chats",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-    Column("name", String, nullable=False),
-    Column("email", String, unique=True, nullable=False),
-    Column("password", String, nullable=False),
+    Column("name", String, nullable=True),
+    Column("type", String, nullable=False),  # 'private' or 'group'
 )
