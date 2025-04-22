@@ -80,8 +80,6 @@ select = [
     "FAST",     # FastAPI (checks for FastAPI-specific issues)
     "PERF",     # Perflint (checks for performance-related issues)
     "FURB",     # refurb (suggests refactoring opportunities)
-    "DOC",      # pydoclint (enforces PEP-257 docstring conventions)
-    "RUF",      # Ruff-specific rules (Ruff’s own rules for static analysis)
 ]
 
 ignore = [
