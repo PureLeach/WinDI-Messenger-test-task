@@ -2,7 +2,7 @@ import logging
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from asyncpg.exceptions import PostgresError, UniqueViolationError  # type: ignore[import-untyped]
+from asyncpg.exceptions import PostgresError, UniqueViolationError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

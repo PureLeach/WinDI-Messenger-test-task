@@ -1,6 +1,6 @@
 from typing import Any
 
-from asyncpg.exceptions import PostgresError, UniqueViolationError  # type: ignore[import-untyped]
+from asyncpg.exceptions import PostgresError, UniqueViolationError
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 

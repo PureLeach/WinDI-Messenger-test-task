@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, func, text
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import UUID
 
 from project.config.db import metadata
@@ -20,4 +20,6 @@ messages = Table(
         onupdate=func.now(),
     ),
     Column("read", Boolean, nullable=False, server_default="false"),
+    # Adding a uniqueness constraint to prevent duplication of messages
+    UniqueConstraint("chat_id", "sender_id", "text", "created_at", name="uq_unique_message"),
 )
