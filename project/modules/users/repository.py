@@ -9,7 +9,7 @@ from project.tables.users import users
 
 class UserRepository(BaseRepository):
     async def create_user(self, name: str, email: str, password: str) -> dict | None:
-        query = insert(users).values(id=uuid4(), name=name, email=email, password=password).returning(users)
+        query = insert(users).values(name=name, email=email, password=password).returning(users)
         result = await self.db.fetch_one(query)
         return dict(result) if result else None
 

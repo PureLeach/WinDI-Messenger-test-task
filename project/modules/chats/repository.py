@@ -9,7 +9,7 @@ from project.tables.group_participants import group_participant
 
 class ChatRepository(BaseRepository):
     async def create_chat(self, name: str | None, type_: str) -> UUID:
-        query = insert(chats).values(id=uuid4(), name=name, type=type_).returning(chats.c.id)
+        query = insert(chats).values(name=name, type=type_).returning(chats.c.id)
         return await self.db.fetch_val(query)
 
     async def add_participants(self, chat_id: UUID, user_ids: list[UUID]) -> None:
