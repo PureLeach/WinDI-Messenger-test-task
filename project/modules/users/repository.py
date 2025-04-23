@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from uuid import uuid4
 
 from sqlalchemy import insert, select
 

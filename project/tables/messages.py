@@ -1,6 +1,3 @@
-import uuid
-from datetime import datetime
-
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table, func, text
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -13,14 +10,14 @@ messages = Table(
     Column("chat_id", UUID(as_uuid=True), ForeignKey("chats.id", ondelete="CASCADE"), nullable=False),
     Column("sender_id", UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
     Column("text", String, nullable=False),
-    Column('created_at', DateTime(timezone=True), index=False, nullable=False, server_default=func.now()),
+    Column("created_at", DateTime(timezone=True), index=False, nullable=False, server_default=func.now()),
     Column(
-        'updated_at',
+        "updated_at",
         DateTime(timezone=True),
         index=True,
         nullable=False,
         server_default=func.now(),
         onupdate=func.now(),
     ),
-    Column("read", Boolean, nullable=False, server_default='false'),
+    Column("read", Boolean, nullable=False, server_default="false"),
 )
