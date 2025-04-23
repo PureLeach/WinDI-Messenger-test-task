@@ -13,6 +13,6 @@ def get_user_service() -> UserService:
     return UserService(UserRepository())
 
 
-@router.post("/")
+@router.post("/", summary="Create user")
 async def create_user(user: UserCreate, service: Annotated[UserService, Depends(get_user_service)]) -> UserOut:
     return await service.register_user(user)
