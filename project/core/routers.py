@@ -7,7 +7,7 @@ from fastapi import APIRouter, FastAPI
 
 from project.config.base import settings
 
-logger = settings.LOGGER.getChild("register_routers")
+logger = settings.LOGGER.getChild(__name__)
 
 
 def register_routers(app: FastAPI) -> None:
