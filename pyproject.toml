@@ -86,6 +86,8 @@ ignore = [
     "G004",     # allow f-strings in logging messages
     "ANN401",   # allow dynamically typed expressions (Any)
     "SLF001",   # allow private member accessed
+    "COM812",   # may cause conflicts when used with the formatter
+    "ISC001",   # may cause conflicts when used with the formatter
     ]
 
 [tool.ruff.lint.extend-per-file-ignores]
