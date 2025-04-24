@@ -1,67 +1,226 @@
-# fastapi-sqlalchemy-boilerplate
+# Messenger test task
 
-This project provides a boilerplate for a FastAPI application integrated with SQLAlchemy 2 (async) and the [databases](https://pypi.org/project/databases/) library for async database interactions. It uses PostgreSQL as the database backend and Docker is used to set up the PostgreSQL container.
+A mini messenger application with the ability to send messages, store them in a database, and create group chats. Completed as part of a test assignment for the position of Backend developer.
 
-## Setup Instructions
+---
 
-### 1. Copy Environment Variables
+## 📦 Functionality
 
-Before starting the project, create a `.env` file by copying the provided `example.env`:
+- Connection via WebSocket
+- Real-time text messaging
+- Storing messages in PostgreSQL
+- Tracking the reading of messages
+- A REST endpoint for getting the message history
+- Prevent duplicate messages when sending in parallel
+- Swagger documentation
+- Containerization with Docker
 
-```bash
-cp example.env .env
+---
+
+## Quick Start
+
+1. Copy the example environment file:
+
+   ```bash
+   cp example.env .env
+   ```
+2. Build the Docker containers:
+
+   ```bash
+   docker-compose build
+   ```
+3. Start the app:
+
+   ```bash
+   docker-compose up
+   ```
+
+---
+
+## Interfaces
+
+- Swagger UI: http://localhost:8000/docs
+- pgAdmin: http://localhost:5050
+
+---
+
+## API Documentation
+
+### Users
+
+#### Create User
+
+- **Endpoint:** `POST /users/`
+- **Description:** Creates a new user.
+- **Request Body (application/json):**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
 ```
 
-### 2. Run PostgreSQL with Docker Compose
+- **Response (200 OK):**
 
-Start the PostgreSQL container using Docker Compose:
-
-```bash
-docker-compose up -d
+```json
+{
+  "id": "uuid",
+  "name": "John Doe",
+  "email": "john@example.com"
+}
 ```
 
-This will spin up a PostgreSQL database that the FastAPI application will connect to.
+### Chats
 
-### 3. Install Dependencies
+#### Create Chat
 
-Install the project dependencies using `pipenv`:
+- **Endpoint:** `POST /chats/`
+- **Description:** Creates a new chat.
+- **Request Body (application/json):**
 
-```bash
-pipenv shell
-pipenv install --dev
+```json
+{
+  "name": "Work Chat",
+  "type": "group",
+  "participantIds": ["uuid1", "uuid2"]
+}
 ```
 
-This will install the required libraries for development and testing.
+- **Response (200 OK):**
 
-### 4. Apply Database Migrations
-
-To apply database migrations, run the following command:
-
-```bash
-make migrate_head
+```json
+{
+  "id": "uuid",
+  "name": "Work Chat",
+  "type": "group",
+  "participantIds": ["uuid1", "uuid2"]
+}
 ```
 
-This will ensure that the database schema is up to date.
+#### Get Chats for User
 
-### 5. Run the Application
+- **Endpoint:** `GET /chats/?user_id=uuid`
+- **Description:** Retrieves all chats the user is a part of.
+- **Response (200 OK):**
 
-Start the FastAPI application with:
-
-```bash
-make run
+```json
+[
+  {
+    "id": "uuid",
+    "name": "Work Chat",
+    "type": "group",
+    "participantIds": ["uuid1", "uuid2"]
+  }
+]
 ```
 
-The application will now be available at [http://localhost:8000/docs#/](http://localhost:8000/docs#/), where you can interact with the API documentation.
+#### Add User to Chat
 
-### 6. Running Tests
+- **Endpoint:** `POST /chats/{chat_id}/users/{user_id}`
+- **Description:** Adds a user to the specified chat.
+- **Response (200 OK):**
 
-To run the project's tests, you can execute `pytest` from the root directory:
-
-```bash
-pytest
+```json
+{
+  "id": "uuid",
+  "name": "Work Chat",
+  "type": "group",
+  "participantIds": ["uuid1", "uuid2", "uuid3"]
+}
 ```
 
-This will run all the tests defined in the project.
+### Messages
+
+#### Get Message History
+
+- **Endpoint:** `GET /messages/history/{chat_id}`
+- **Description:** Retrieves the message history for a given chat.
+- **Query Parameters (optional):**
+  - `limit`: Number of messages to return (default: 100)
+  - `offset`: Pagination offset (default: 0)
+- **Response (200 OK):**
+
+```json
+[
+  {
+    "id": "uuid",
+    "chatId": "uuid",
+    "senderId": "uuid",
+    "text": "Hello!",
+    "read": true,
+    "createdAt": "2025-04-24T12:00:00Z",
+    "updatedAt": "2025-04-24T12:00:00Z"
+  }
+]
+```
+
+---
+
+### WebSocket
+
+#### Chat Messaging
+
+- **Endpoint:** `ws://localhost:8000/messages/ws/{chat_id}/{user_id}`
+- **Description:** Opens a real-time WebSocket connection for sending and receiving messages in a chat.
+
+#### Message Types
+
+1. **Send a Message**
+
+   - Sends a new chat message to all participants.
+   - **Message Format:**
+     ```json
+     {
+       "event": "message",
+       "data": {
+         "text": "Hey, how are you?"
+       }
+     }
+     ```
+2. **Mark as Read**
+
+   - Notifies the server that a message has been read.
+   - **Message Format:**
+     ```json
+     {
+       "event": "read",
+       "data": {
+         "message_id": "f2abadb9-6a60-44c4-8c74-01aa2f520bf8"
+       }
+     }
+     ```
+
+---
+
+## Tests:
+
+To run the tests, load the dependencies using the pipenv package manager and run the command `> pytest`
+
+1. Copy the sample environment file if you haven't done this before:
+
+   ```bash
+   cp example.env .env
+   ```
+2. Create a new virtual environment and install dependencies:
+
+   ```bash
+   pipenv shell
+   pipenv install --dev
+   ```
+3. Start the postgres container:
+
+   ```bash
+   docker-compose up postgres
+   ```
+4. To run the project's tests, you can execute `pytest` from the root directory:
+
+   ```bash
+   pytest
+   ```
+
+---
 
 ## Technologies Used
 
@@ -69,15 +228,8 @@ This will run all the tests defined in the project.
 - **SQLAlchemy 2 (Async)**: ORM for Python with async support.
 - **Databases**: Asynchronous database query library.
 - **PostgreSQL**: Relational database management system used for storage.
-- **Docker**: To run PostgreSQL in a container.
+- **Docker**: To run the project in a container.
+- **Docker Compose**: To define and manage multi-container Docker applications.
 - **Pipenv**: To manage project dependencies.
 
-## Notes
-
-- Ensure that PostgreSQL is running before you attempt to start the FastAPI application.
-- The `make migrate_head` command applies the latest database migrations. Make sure the database is initialized and running.
-- To generate a new migration, use the command `make create_migration name=new_migration` 
-
 ---
-
-Happy coding! 🚀
