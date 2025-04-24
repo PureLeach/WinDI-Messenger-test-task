@@ -61,10 +61,8 @@ async def db():
 async def clean_db(db):
     transaction = await db.transaction()
     try:
-        # await db.execute(text("SET session_replication_role = 'replica';"))
         for table in reversed(metadata.sorted_tables):
             await db.execute(table.delete())
-            # await db.execute(text("SET session_replication_role = 'origin';"))
     except Exception:
         await transaction.rollback()
     else:

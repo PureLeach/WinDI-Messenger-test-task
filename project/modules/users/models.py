@@ -13,5 +13,5 @@ class UserCreate(ProjectBaseModel):
 
 class UserOut(ProjectBaseModel):
     id: UUID
-    name: EmailStr
-    email: str
+    name: str
+    email: EmailStr
