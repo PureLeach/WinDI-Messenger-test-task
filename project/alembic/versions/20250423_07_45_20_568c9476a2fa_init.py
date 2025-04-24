@@ -24,7 +24,7 @@ def upgrade() -> None:
         "chats",
         sa.Column("id", sa.UUID(), server_default=sa.text("gen_random_uuid()"), nullable=False),
         sa.Column("name", sa.String(), nullable=True),
-        sa.Column("type", sa.String(), nullable=False),
+        sa.Column("type", sa.Enum("personal", "group", name="chattype"), nullable=False),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_chats")),
     )
     op.create_table(
@@ -41,16 +41,10 @@ def upgrade() -> None:
         sa.Column("chat_id", sa.UUID(), nullable=False),
         sa.Column("user_id", sa.UUID(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["chat_id"],
-            ["chats.id"],
-            name=op.f("fk_group_participants_chat_id_chats"),
-            ondelete="CASCADE",
+            ["chat_id"], ["chats.id"], name=op.f("fk_group_participants_chat_id_chats"), ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-            name=op.f("fk_group_participants_user_id_users"),
-            ondelete="CASCADE",
+            ["user_id"], ["users.id"], name=op.f("fk_group_participants_user_id_users"), ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("chat_id", "user_id", name=op.f("pk_group_participants")),
     )
@@ -65,10 +59,7 @@ def upgrade() -> None:
         sa.Column("read", sa.Boolean(), server_default="false", nullable=False),
         sa.ForeignKeyConstraint(["chat_id"], ["chats.id"], name=op.f("fk_messages_chat_id_chats"), ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
-            ["sender_id"],
-            ["users.id"],
-            name=op.f("fk_messages_sender_id_users"),
-            ondelete="CASCADE",
+            ["sender_id"], ["users.id"], name=op.f("fk_messages_sender_id_users"), ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id", name=op.f("pk_messages")),
     )
@@ -84,3 +75,5 @@ def downgrade() -> None:
     op.drop_table("users")
     op.drop_table("chats")
     # ### end Alembic commands ###
+
+    op.execute("DROP TYPE IF EXISTS chattype")

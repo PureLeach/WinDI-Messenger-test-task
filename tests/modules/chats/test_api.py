@@ -1,9 +1,11 @@
 from fastapi import status
 
+from project.modules.chats.models import ChatType
+
 
 async def test_create_chat(test_client, create_users):
     user_1, user_2, _ = create_users
-    payload = {"name": "My Chat", "type": "private", "participant_ids": [str(user_1.id), str(user_2.id)]}
+    payload = {"name": "My Chat", "type": ChatType.personal, "participant_ids": [str(user_1.id), str(user_2.id)]}
 
     response = await test_client.post("/chats/", json=payload)
     result = response.json()
@@ -32,7 +34,7 @@ async def test_add_user_to_chat(test_client, create_users):
 
 async def test_get_chats_for_user(test_client, create_users):
     user_1, _, _ = create_users
-    payload = {"type": "private", "participant_ids": [str(user_1.id)]}
+    payload = {"type": ChatType.personal, "participant_ids": [str(user_1.id)]}
 
     await test_client.post("/chats/", json=payload)
 
