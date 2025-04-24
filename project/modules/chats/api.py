@@ -19,7 +19,7 @@ async def create_chat(chat: ChatCreate, service: Annotated[ChatService, Depends(
     return await service.create_chat(chat)
 
 
-@router.post("/chats/{chat_id}/users/{user_id}", summary="Add user to chat")
+@router.post("/{chat_id}/users/{user_id}", summary="Add user to chat")
 async def add_user_to_chat(
     chat_id: UUID, user_id: UUID, service: Annotated[ChatService, Depends(get_chat_service)]
 ) -> ChatOut:
