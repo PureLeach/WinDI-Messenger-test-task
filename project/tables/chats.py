@@ -8,5 +8,5 @@ chats = Table(
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")),
     Column("name", String, nullable=True),
-    Column("type", String, nullable=False),  # 'private' or 'group'
+    Column("type", String, nullable=False),
 )

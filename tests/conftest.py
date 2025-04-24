@@ -8,7 +8,15 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
 from project.config.base import settings
+from project.config.db import metadata
 from project.main import app
+
+pytest_plugins = [
+    "tests.fixtures.users",
+    "tests.fixtures.chats",
+    "tests.fixtures.group_participants",
+    "tests.fixtures.messages",
+]
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -24,7 +32,7 @@ def event_loop_policy():
 @pytest.fixture(scope="session")
 async def test_client() -> AsyncGenerator[AsyncClient, None]:
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://krakend") as async_client:
+    async with AsyncClient(transport=transport, base_url="http://test") as async_client:
         yield async_client
 
 
@@ -43,38 +51,21 @@ async def create_test_db() -> AsyncGenerator[None, None]:
         drop_database(sync_url)
 
 
-# Method 1. It works, but the transaction rollback does not occur
 @pytest.fixture(scope="function")
 async def db():
     async with settings.DB.db_instance as db:
         yield db
 
 
-# Method 2. First test pass, but program freezes when executing `await transaction.rollback()`
-# @pytest.fixture(scope="function")
-# async def db():
-#     async with settings.DB.db_instance as db:
-#         transaction = db.transaction(isolation='serializable')
-#         await transaction.start()
-#         yield db
-#         await transaction.rollback()
-
-
-# Method 3. First test pass, but program raises exception IndexError: list index out of range
-# @pytest.fixture(scope="function")
-# async def db():
-#     db = settings.DB.db_instance
-#     await db.connect()
-#     transaction = await db.transaction()
-#     try:
-#         yield db
-#     finally:
-#         await transaction.rollback()
-#         await db.disconnect()
-
-
-# Method 4. databases/core.py:473: AssertionError
-# @pytest.fixture(scope="function")
-# async def db():
-#     async with Database(settings.DB.DATABASE_DSN, force_rollback=True) as db:
-#         yield db
+@pytest.fixture(autouse=True, scope="function")
+async def clean_db(db):
+    transaction = await db.transaction()
+    try:
+        # await db.execute(text("SET session_replication_role = 'replica';"))
+        for table in reversed(metadata.sorted_tables):
+            await db.execute(table.delete())
+            # await db.execute(text("SET session_replication_role = 'origin';"))
+    except Exception:
+        await transaction.rollback()
+    else:
+        await transaction.commit()

@@ -2,7 +2,7 @@
 addopts = "-s --asyncio-mode=auto --import-mode=prepend"
 env = [
     "POSTGRES_HOST=localhost",
-    "POSTGRES_DB_NAME=fastapi-boilerplate-test",
+    "POSTGRES_DB_NAME=messenger-test",
 ]
 
 
@@ -103,6 +103,9 @@ ignore = [
     "PT003",    # allow scope='function' in fixture
     "ARG001",    # allow unused function argument
     "ERA001",    # allow commented-out code
+    "PLR2004",    # allow magic value
+    "INP001",    # allow part of an implicit namespace package
+    "BLE001",    # allow catch blind exception
     ]
 
 
