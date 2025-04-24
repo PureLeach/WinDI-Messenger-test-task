@@ -1,4 +1,4 @@
-# Messenger test task
+# 💬 Messenger test task
 
 A mini messenger application with the ability to send messages, store them in a database, and create group chats. Completed as part of a test assignment for the position of Backend developer.
 
@@ -13,68 +13,67 @@ A mini messenger application with the ability to send messages, store them in a 
 - Swagger documentation
 - Containerization with Docker
 
-## Quick Start
+## 🚀 Quick Start
 
 1. Copy the example environment file:
 
-   ```bash
-   cp example.env .env
-   ```
+  ```bash
+  cp example.env .env
+  ```
 2. Build the Docker containers:
 
-   ```bash
-   docker-compose build
-   ```
+  ```bash
+  docker-compose build
+  ```
 3. Start the app:
 
-   ```bash
-   docker-compose up
-   ```
+  ```bash
+  docker-compose up
+  ```
 
-## Interfaces
+## 🌐 Interfaces
 
 - Swagger UI: http://localhost:8000/docs
 - pgAdmin: http://localhost:5050
 
-## Seed Test Data Script
+## 🛠️ Seed Test Data Script
 
 This script (`seed_test_data.sh`) automatically fills your PostgreSQL database with test data — including users, chats, participants, and messages.
 
-### Setup
+### ⚙️ Setup
 
 1. **Create a `.env` file** in the root directory and add the following content:
 
-   ```
-   cp example.env .env
-   ```
+  ```
+  cp example.env .env
+  ```
 2. **Make sure PostgreSQL client (`psql`) is installed**:
 
-   #### On Ubuntu/Debian:
+  #### On Ubuntu/Debian:
 
+  ```bash
+  sudo apt install postgresql-client
+  ```
 
-   ```bash
-   sudo apt install postgresql-client
-   ```
+  #### On macOS (via Homebrew):
 
-   #### On macOS (via Homebrew):
+  ```bash
+  brew install libpq
+  brew link --force libpq
+  ```
 
-   ```bash
-   brew install libpq
-   brew link --force libpq
-   ```
-
-### Usage
+### ▶️ Usage
 
 1. Make the script executable:
 
-   ```bash
-   chmod +x seed_test_data.sh
-   ```
+  ```bash
+  chmod +x seed_test_data.sh
+  ```
 2. Run the script:
 
-   ```bash
-   ./seed_test_data.sh
-   ```
+  ```bash
+  ./seed_test_data.sh
+  ```
 
 If everything is set up correctly, you’ll see:
 
@@ -82,11 +81,11 @@ If everything is set up correctly, you’ll see:
 ✅ Messenger database has been successfully filled with test data.
 ```
 
-## API Documentation
+## 📖 API Documentation
 
-### Users
+### 👤 Users
 
-#### Create User
+#### ➕ Create User
 
 - **Endpoint:** `POST /users/`
 - **Description:** Creates a new user.
@@ -110,9 +109,9 @@ If everything is set up correctly, you’ll see:
 }
 ```
 
-### Chats
+### 💬 Chats
 
-#### Create Chat
+#### ➕ Create Chat
 
 - **Endpoint:** `POST /chats/`
 - **Description:** Creates a new chat.
@@ -137,7 +136,7 @@ If everything is set up correctly, you’ll see:
 }
 ```
 
-#### Get Chats for User
+#### 📜 Get Chats for User
 
 - **Endpoint:** `GET /chats/?user_id=uuid`
 - **Description:** Retrieves all chats the user is a part of.
@@ -146,15 +145,15 @@ If everything is set up correctly, you’ll see:
 ```json
 [
   {
-    "id": "uuid",
-    "name": "Work Chat",
-    "type": "group",
-    "participantIds": ["uuid1", "uuid2"]
+   "id": "uuid",
+   "name": "Work Chat",
+   "type": "group",
+   "participantIds": ["uuid1", "uuid2"]
   }
 ]
 ```
 
-#### Add User to Chat
+#### ➕ Add User to Chat
 
 - **Endpoint:** `POST /chats/{chat_id}/users/{user_id}`
 - **Description:** Adds a user to the specified chat.
@@ -169,9 +168,9 @@ If everything is set up correctly, you’ll see:
 }
 ```
 
-### Messages
+### ✉️ Messages
 
-#### Get Message History
+#### 📜 Get Message History
 
 - **Endpoint:** `GET /messages/history/{chat_id}`
 - **Description:** Retrieves the message history for a given chat.
@@ -183,84 +182,84 @@ If everything is set up correctly, you’ll see:
 ```json
 [
   {
-    "id": "uuid",
-    "chatId": "uuid",
-    "senderId": "uuid",
-    "text": "Hello!",
-    "read": true,
-    "createdAt": "2025-04-24T12:00:00Z",
-    "updatedAt": "2025-04-24T12:00:00Z"
+   "id": "uuid",
+   "chatId": "uuid",
+   "senderId": "uuid",
+   "text": "Hello!",
+   "read": true,
+   "createdAt": "2025-04-24T12:00:00Z",
+   "updatedAt": "2025-04-24T12:00:00Z"
   }
 ]
 ```
 
 ---
 
-### WebSocket
+### 🔗 WebSocket
 
-#### Chat Messaging
+#### 💬 Chat Messaging
 
 - **Endpoint:** `ws://localhost:8000/messages/ws/{chat_id}/{user_id}`
 - **Description:** Opens a real-time WebSocket connection for sending and receiving messages in a chat.
 
-#### Message Types
+#### 📨 Message Types
 
 1. **Send a Message**
 
-   - Sends a new chat message to all participants.
-   - **Message Format:**
-     ```json
-     {
-       "event": "message",
-       "data": {
-         "text": "Hey, how are you?"
-       }
+  - Sends a new chat message to all participants.
+  - **Message Format:**
+    ```json
+    {
+     "event": "message",
+     "data": {
+      "text": "Hey, how are you?"
      }
-     ```
+    }
+    ```
 2. **Mark as Read**
 
-   - Notifies the server that a message has been read.
-   - **Message Format:**
-     ```json
-     {
-       "event": "read",
-       "data": {
-         "message_id": "f2abadb9-6a60-44c4-8c74-01aa2f520bf8"
-       }
+  - Notifies the server that a message has been read.
+  - **Message Format:**
+    ```json
+    {
+     "event": "read",
+     "data": {
+      "message_id": "f2abadb9-6a60-44c4-8c74-01aa2f520bf8"
      }
-     ```
+    }
+    ```
 
 ---
 
-## Tests:
+## 🧪 Tests:
 
 To run the tests, load the dependencies using the pipenv package manager and run the command `> pytest`
 
 1. Copy the sample environment file if you haven't done this before:
 
-   ```bash
-   cp example.env .env
-   ```
+  ```bash
+  cp example.env .env
+  ```
 2. Create a new virtual environment and install dependencies:
 
-   ```bash
-   pipenv shell
-   pipenv install --dev
-   ```
+  ```bash
+  pipenv shell
+  pipenv install --dev
+  ```
 3. Start the postgres container:
 
-   ```bash
-   docker-compose up postgres
-   ```
+  ```bash
+  docker-compose up postgres
+  ```
 4. To run the project's tests, you can execute `pytest` from the root directory:
 
-   ```bash
-   pytest
-   ```
+  ```bash
+  pytest
+  ```
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 - **FastAPI**: Fast web framework for building APIs with Python.
 - **SQLAlchemy 2 (Async)**: ORM for Python with async support.
@@ -269,3 +268,4 @@ To run the tests, load the dependencies using the pipenv package manager and run
 - **Docker**: To run the project in a container.
 - **Docker Compose**: To define and manage multi-container Docker applications.
 - **Pipenv**: To manage project dependencies.
+
