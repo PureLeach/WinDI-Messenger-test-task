@@ -2,8 +2,6 @@
 
 A mini messenger application with the ability to send messages, store them in a database, and create group chats. Completed as part of a test assignment for the position of Backend developer.
 
----
-
 ## 📦 Functionality
 
 - Connection via WebSocket
@@ -14,8 +12,6 @@ A mini messenger application with the ability to send messages, store them in a 
 - Prevent duplicate messages when sending in parallel
 - Swagger documentation
 - Containerization with Docker
-
----
 
 ## Quick Start
 
@@ -35,14 +31,56 @@ A mini messenger application with the ability to send messages, store them in a 
    docker-compose up
    ```
 
----
-
 ## Interfaces
 
 - Swagger UI: http://localhost:8000/docs
 - pgAdmin: http://localhost:5050
 
----
+## Seed Test Data Script
+
+This script (`seed_test_data.sh`) automatically fills your PostgreSQL database with test data — including users, chats, participants, and messages.
+
+### Setup
+
+1. **Create a `.env` file** in the root directory and add the following content:
+
+   ```
+   cp example.env .env
+   ```
+2. **Make sure PostgreSQL client (`psql`) is installed**:
+
+   #### On Ubuntu/Debian:
+
+
+   ```bash
+   sudo apt install postgresql-client
+   ```
+
+   #### On macOS (via Homebrew):
+
+   ```bash
+   brew install libpq
+   brew link --force libpq
+   ```
+
+### Usage
+
+1. Make the script executable:
+
+   ```bash
+   chmod +x seed_test_data.sh
+   ```
+2. Run the script:
+
+   ```bash
+   ./seed_test_data.sh
+   ```
+
+If everything is set up correctly, you’ll see:
+
+```
+✅ Messenger database has been successfully filled with test data.
+```
 
 ## API Documentation
 
@@ -231,5 +269,3 @@ To run the tests, load the dependencies using the pipenv package manager and run
 - **Docker**: To run the project in a container.
 - **Docker Compose**: To define and manage multi-container Docker applications.
 - **Pipenv**: To manage project dependencies.
-
----
