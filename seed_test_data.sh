@@ -65,7 +65,7 @@ SELECT gen_random_uuid(), c.id, u.id,
 FROM users u
 CROSS JOIN chats c
 WHERE (c.name = 'Group Chat' AND u.email IN ('alice@example.com', 'bob@example.com'))
-   OR (c.name IS NULL AND u.email = 'charlie@example.com');
+   OR (c.name = 'Personal Chat' AND u.email = 'charlie@example.com');
 
 EOF
 
